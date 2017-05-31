@@ -19,11 +19,13 @@ public class Hand
 	
 	ArrayList<Card> hand;
 	boolean done;
+	boolean start;
 	
 	public Hand()
 	{
 		hand = new ArrayList<Card>(13);
 		done = false;
+		start = false;
 	}
 	
 	public Hand(ArrayList<Card> x)
@@ -36,7 +38,18 @@ public class Hand
 		hand.add(c);
 	}
 	
-	public boolean isDone(ArrayList<Card> hand)
+	public void sortByValue()
+	{
+		hand.sort(Card.CardComparator);
+	}
+	
+	public void sortBySuit()
+	{
+		hand.sort(Card.SuitComparator);
+	}
+	
+	
+	public boolean isDone()
 	{
 		if(hand.size() > 0)
 			return false;
@@ -53,14 +66,14 @@ public class Hand
 		}
 	}
 	
-	public int[] getHand()
+	public Card[] getHand()
 	{
-		int[] playingHand = new int[5];
+		int[] playingHandInt = new int[5];
+		Card[] playingHand = new Card[5];
 		int choice = 0;
-		int[] cards = new int[5];
-		System.out.println("1. Show hand sorted by value" +
-						   "2. Show hand sorted by suit" + 
-						   "3. Select cards to play" + 
+		System.out.println("\n1. Show hand sorted by value\n" +
+						   "2. Show hand sorted by suit\n" + 
+						   "3. Select cards to play\n" + 
 						   "4. Pass");
 		choice = scan.nextInt();
 		if(choice == 1)
@@ -75,22 +88,35 @@ public class Hand
 		}
 		if(choice == 3)
 		{
+			int count = 0;
 			System.out.println("Enter the card(s) that you want to select: ");
-			String x = scan.nextLine();
-		    String[] num = x.split(" ");
-		    
-		    for(int i = 0; i < num.length; i++)
+		    while(scan.hasNextInt())
 		    {
-		    	playingHand[i] = Integer.parseInt(num[i]);
+		    	playingHandInt[count] = scan.nextInt();
+		    	count++;
 		    }
-		    
+		    for(int i = 0; i < playingHandInt.length; i++)
+		    {
+		    	playingHand[i] = hand.get(playingHandInt[i] - 1);
+		    }
 		}
 		if(choice == 4)
 		{
-			done = true;;
+			done = true;
 		}
 		return playingHand;
 	}
 	
+	public boolean starts()
+	{
+		for(Card c : hand)
+		{
+			if(c.getSuit() == 0 && c.getValue() == 3)
+			{
+				start = true;
+			}
+		}
+		return start;
+	}
 	
 }

@@ -65,7 +65,7 @@ public class Card implements Comparable<Card>
       if (theSuit != SPADES && theSuit != HEARTS && theSuit != DIAMONDS && 
             theSuit != CLUBS && theSuit != JOKER)
          throw new IllegalArgumentException("Illegal playing card suit");
-      if (theSuit != JOKER && (theValue < 1 || theValue > 14))
+      if (theSuit != JOKER && (theValue < 2 || theValue > 15))
          throw new IllegalArgumentException("Illegal playing card value");
       value = theValue;
       suit = theSuit;
@@ -116,7 +116,7 @@ public class Card implements Comparable<Card>
       else {
          switch ( value ) {
          case 14:   return "Ace";
-         case 2:   return "2";
+         case 15:   return "2";
          case 3:   return "3";
          case 4:   return "4";
          case 5:   return "5";
@@ -170,5 +170,16 @@ public class Card implements Comparable<Card>
 	   }
 
    };
+   
+   public static Comparator<Card> SuitComparator = new Comparator<Card>() {
+	   
+	   public int compare(Card c1, Card c2) {
+		   if(c1.getSuit() == c2.getSuit())
+		   {
+			   return c2.getValue() - c1.getValue();
+		   }
+		   return c2.getSuit() - c1.getSuit();
+	   }
 
+   };
 } // end class Card
