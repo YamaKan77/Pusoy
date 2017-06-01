@@ -150,6 +150,11 @@ public class Card implements Comparable<Card>
          return getValueAsString() + " of " + getSuitAsString();
    }
    
+   public void printCard()
+   {
+	   System.out.printf("%-6s%s", getValueAsString(), getSuitAsString());
+   }
+   
    public int compareTo(Card c)
    {
 	   if(this.getValue() == c.getValue())

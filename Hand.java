@@ -7,24 +7,16 @@ import pusoy.Card;
 public class Hand 
 {
 	Scanner scan = new Scanner(System.in);
-	public final static int ROYAL_FLUSH = 7;
-	public final static int STRAIGHT_FLUSH = 6;
-	public final static int FOUR_KIND = 5;
-	public final static int FULL_HOUSE = 4;
-	public final static int FLUSH = 3;
-	public final static int STRAIGHT = 2;
-	public final static int PAIR = 1;
-	public final static int SINGLE = 0;
-	
 	
 	ArrayList<Card> hand;
-	boolean done;
+	boolean roundDone;
+	boolean gameDone;
 	boolean start;
 	
 	public Hand()
 	{
 		hand = new ArrayList<Card>(13);
-		done = false;
+		roundDone = false;
 		start = false;
 	}
 	
@@ -52,26 +44,34 @@ public class Hand
 	public boolean isDone()
 	{
 		if(hand.size() > 0)
-			return false;
+		{
+			gameDone = false;
+			return gameDone;
+		}
 		else
-			return true;
+		{
+			gameDone = true;
+			return gameDone;
+		}
 	}
 	
 	public void print()
 	{
 		System.out.println("\n");
-		for(int i = 1; i <= hand.size(); i++)
+		for(int i = 0; i < hand.size(); i++)
 		{
-			System.out.println(i + ". " + hand.get(i-1).getValueAsString()+ " " + hand.get(i-1).getSuitAsString());
+			System.out.printf("%-3d", (i + 1));
+			hand.get(i).printCard();
+			System.out.println();
 		}
 	}
 	
-	public Card[] getHand()
+	public ArrayList<Card> getHand()
 	{
-		int[] playingHandInt = new int[5];
-		Card[] playingHand = new Card[5];
+		ArrayList<Integer> playingHandInt = new ArrayList<Integer>();
+		ArrayList<Card> playingHand = new ArrayList<Card>();
 		int choice = 0;
-		System.out.println("\n1. Show hand sorted by value\n" +
+		System.out.println("1. Show hand sorted by value\n" +
 						   "2. Show hand sorted by suit\n" + 
 						   "3. Select cards to play\n" + 
 						   "4. Pass");
@@ -89,23 +89,28 @@ public class Hand
 		if(choice == 3)
 		{
 			int count = 0;
-			System.out.println("Enter the card(s) that you want to select: ");
-		    while(scan.hasNextInt())
-		    {
-		    	playingHandInt[count] = scan.nextInt();
-		    	count++;
+			System.out.print("Which card(s) do you want to play(-1 for no other card): ");
+			for(int i = 0; i < 5; i++)
+			{
+				int num = scan.nextInt();
+				playingHandInt.add(num);
+	    		count++;
 		    }
-		    for(int i = 0; i < playingHandInt.length; i++)
+		    for(int i = 0; i < playingHandInt.size(); i++)
 		    {
-		    	playingHand[i] = hand.get(playingHandInt[i] - 1);
+		    	if(playingHandInt.get(i)!= -1)
+		    	{
+		    		playingHand.add(hand.get(playingHandInt.get(i) - 1));
+		    	}
 		    }
 		}
 		if(choice == 4)
 		{
-			done = true;
+			roundDone = true;
 		}
 		return playingHand;
 	}
+	
 	
 	public boolean starts()
 	{
