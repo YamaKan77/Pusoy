@@ -50,16 +50,16 @@ public class Pusoy
 		return numLeft;
 	}
 	
-	public static int remainingInGame(boolean w, boolean x, boolean y, boolean z)
+	public static int remainingInGame()
 	{
 		int numLeft = 0;
-		if(!w)
+		if(!hand1.gameDone)
 			numLeft++;
-		if(!x)
+		if(!hand2.gameDone)
 			numLeft++;
-		if(!y)
+		if(!hand3.gameDone)
 			numLeft++;
-		if(!z)
+		if(!hand4.gameDone)
 			numLeft++;
 		
 		return numLeft;
@@ -77,7 +77,7 @@ public class Pusoy
 			return 4;
 	}
 	
-	public static void getInput(int start, int remaining)
+	public static int getInput(int start, int remaining)
 	{
 		int numberOfInputs = 0;
 		int rankMin = 0;
@@ -112,7 +112,7 @@ public class Pusoy
 		{
 			start = 1;
 		}
-		while(numberOfInputs < remaining && hands.get(start - 1).roundDone == false)
+		while(numberOfInputs < remaining)
 		{
 			hands.get(start - 1).sortByValue();
 			hands.get(start - 1).print();
@@ -121,7 +121,7 @@ public class Pusoy
 			numberOfInputs++;
 			start++;
 		}
-		
+		return start;
 	}
 	
 	public static void main(String[] args)
@@ -130,7 +130,11 @@ public class Pusoy
 		
 		startGame();
 		
-		playRound();
+		while(remainingInGame() > 1)
+		{
+			playRound();
+		}
+		
 		
 	}
 	
@@ -203,14 +207,9 @@ public class Pusoy
 	{
 		while(remainingInRound() > 1)
 		{
-			int roundHandSize = 0;
 			getInput(winner, remainingInRound());
-			
-
-			
 		}
-		
-		return 1;
+		return winner;
 	}
 	
 	private static int getRank(ArrayList<Card> playingHand) 

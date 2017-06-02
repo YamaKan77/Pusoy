@@ -71,22 +71,10 @@ public class Hand
 		ArrayList<Integer> playingHandInt = new ArrayList<Integer>();
 		ArrayList<Card> playingHand = new ArrayList<Card>();
 		int choice = 0;
-		System.out.println("1. Show hand sorted by value\n" +
-						   "2. Show hand sorted by suit\n" + 
-						   "3. Select cards to play\n" + 
-						   "4. Pass");
+		System.out.println("1. Select cards to play\n" + 
+						   "2. Pass");
 		choice = scan.nextInt();
 		if(choice == 1)
-		{
-			hand.sort(Card.CardComparator);
-			print();
-		}
-		if(choice == 2)
-		{
-			hand.sort(Card.SuitComparator);
-			print();
-		}
-		if(choice == 3)
 		{
 			int count = 0;
 			System.out.print("Which card(s) do you want to play(-1 for no other card): ");
@@ -101,13 +89,14 @@ public class Hand
 		    	if(playingHandInt.get(i)!= -1)
 		    	{
 		    		playingHand.add(hand.get(playingHandInt.get(i) - 1));
+		    		hand.remove(playingHandInt.get(i));
 		    	}
 		    }
 		}
-		if(choice == 4)
+		if(choice == 2)
 		{
 			roundDone = true;
-		}
+		}roundDone = true;
 		return playingHand;
 	}
 	
