@@ -141,7 +141,7 @@ public class Hand
 		    	if(playingHandInt.get(i)!= 0)
 		    	{
 		    		playingHand.add(hand.get(playingHandInt.get(i) - 1));
-		    		hand.remove(playingHandInt.get(i));
+		    		hand.remove(playingHandInt.get(i) - 1);
 		    	}
 		    }
 		}
