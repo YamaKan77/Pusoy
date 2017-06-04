@@ -78,51 +78,11 @@ public class Pusoy
 			return 4;
 	}
 	
-//	public static int getInput(int start, int remaining)
-//	{
-//		int numberOfInputs = 0;
-//		int rankMin = 0;
-//		boolean first = true;
-//		while(start < 5 && hands.get(start - 1).roundDone == false)
-//		{
-//			hands.get(start - 1).sortByValue();
-//			hands.get(start - 1).print();
-//			System.out.println("Player " + start + ", select card to play");
-//			playingHands[start - 1] = hands.get(start - 1).getHand();
-//			if(getRank(playingHands[start - 1]) < rankMin)
-//			{
-//				System.out.println("Hand does not beat the last one played, re-pick or pass");
-//				playingHands[start - 1] = hands.get(start - 1).getHand();
-//			}
-//			if(first == true)
-//			{
-//				rankMin = getRank(playingHands[start-1]);
-//				first = false;
-//			}
-//			numberOfInputs++;
-//			start++;
-//			
-//		}
-//		if(start == 5 && numberOfInputs < remaining)
-//		{
-//			start = 1;
-//		}
-//		while(numberOfInputs < remaining)
-//		{
-//			hands.get(start - 1).sortByValue();
-//			hands.get(start - 1).print();
-//			System.out.println("Player " + start + ", select card to play");
-//			playingHands[start - 1] = hands.get(start - 1).getHand();
-//			numberOfInputs++;
-//			start++;
-//		}
-//		return start;
-//	}
 	
 	public static int getInput(int start, int remaining, boolean first)
 	{
 		int numberOfInputs = 0;
-		int rankMin = 0;
+		int rankMin = -1;
 		if(start != 5 && hands.get(start - 1).roundDone == true)
 		{
 			start++;
@@ -137,17 +97,30 @@ public class Pusoy
 					System.out.println(currentHand.get(i));
 				}
 			}
-			//Figure out how to know the last hand that was played
+
 			hands.get(start - 1).sortByValue();
 			hands.get(start - 1).print();
 			System.out.println("Player " + start + ", select card to play");
 			playingHands[start - 1] = hands.get(start - 1).getHand();
-			currentHand = playingHands[start - 1];
-			while(getRank(playingHands[start - 1]) < rankMin && hands.get(start - 1).roundDone == false)
+			
+			while(getRank(playingHands[start - 1]) <= rankMin && hands.get(start - 1).roundDone == false)
 			{
-				System.out.println("Hand does not beat the last one played, re-pick or pass");
-				playingHands[start - 1] = hands.get(start - 1).getHand();
+				if(playingHands[start - 1].get(0).getValue() == currentHand.get(0).getValue())
+				{
+					if(playingHands[start - 1].get(0).getSuit() < currentHand.get(0).getSuit())
+					{
+						System.out.println("Hand does not beat the last one played, re-pick or pass");
+						playingHands[start - 1] = hands.get(start - 1).getHand();
+					}
+				}
+				else if(playingHands[start - 1].get(0).getValue() < currentHand.get(0).getValue())
+				{
+					System.out.println("Hand does not beat the last one played, re-pick or pass");
+					playingHands[start - 1] = hands.get(start - 1).getHand();
+				}
+				System.out.println("lalalal");
 			}
+			currentHand = playingHands[start - 1];
 			if(first == true)
 			{
 				rankMin = getRank(playingHands[start-1]);
@@ -291,9 +264,7 @@ public class Pusoy
 		boolean first = true;
 		do
 		{	
-			System.out.println(remainingInRound());
 			winner = getInput(winner, remainingInRound(), first);
-			System.out.println("Round still going");
 		} while(remainingInRound() > 1);
 		System.out.println("Round done");
 		return winner;
