@@ -105,7 +105,7 @@ public class Pusoy
 			while(getRank(playingHands[start - 1]) <= rankMin && hands.get(start - 1).roundDone == false)
 			{
 				System.out.println("Checking if valid hand");
-				
+				//GETTING STUCK IN INFINITE LOOP
 				//checks if the hand played is a single, can only play single against single
 				if(rankMin == 0 && getRank(playingHands[start - 1]) != 0 && hands.get(start - 1).roundDone == false)
 				{
@@ -115,14 +115,14 @@ public class Pusoy
 
 				}
 				//Checks if the and is a pair, other users can only enter another pair
-				else if(rankMin == 1 && getRank(playingHands[start - 1]) > 1 && hands.get(start - 1).roundDone == false)
+				if(rankMin == 1 && getRank(playingHands[start - 1]) > 1 && hands.get(start - 1).roundDone == false)
 				{
 					System.out.println("Current round is pairs, enter a pair or pass");
 					playingHands[start - 1] = hands.get(start - 1).getHand();
 					break;
 				}
 				//checks if the highest card of the hand is higher than the highest card of last hand played
-				else if(playingHands[start - 1].get(0).getValue() == currentHand.get(0).getValue())
+				if(playingHands[start - 1].get(0).getValue() == currentHand.get(0).getValue())
 				{
 					if(playingHands[start - 1].get(0).getSuit() < currentHand.get(0).getSuit())
 					{
@@ -135,6 +135,8 @@ public class Pusoy
 					System.out.println("zzHand does not beat the last one played, re-pick or pass");
 					playingHands[start - 1] = hands.get(start - 1).getHand();
 				}
+				else
+					hands.get(start - 1).roundDone = true;
 			}
 			if(hands.get(start - 1).roundDone == false)
 			{
