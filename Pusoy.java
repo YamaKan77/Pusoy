@@ -81,6 +81,8 @@ public class Pusoy
 	
 	public static int getInput(int start, int remaining, boolean first)
 	{
+		
+		//think about changing start index from 0 instead of 1
 		int numberOfInputs = 0;
 		int rankMin = -1;
 		if(start != 5 && hands.get(start - 1).roundDone == true)
@@ -104,8 +106,6 @@ public class Pusoy
 			playingHands[start - 1] = hands.get(start - 1).getHand();
 			while(getRank(playingHands[start - 1]) <= rankMin && hands.get(start - 1).roundDone == false)
 			{
-				System.out.println("Checking if valid hand");
-				//GETTING STUCK IN INFINITE LOOP
 				//checks if the hand played is a single, can only play single against single
 				if(rankMin == 0 && getRank(playingHands[start - 1]) != 0 && hands.get(start - 1).roundDone == false)
 				{
@@ -122,17 +122,17 @@ public class Pusoy
 					break;
 				}
 				//checks if the highest card of the hand is higher than the highest card of last hand played
-				if(playingHands[start - 1].get(0).getValue() == currentHand.get(0).getValue())
+				if(rankMin > 1 && playingHands[start - 1].get(0).getValue() == currentHand.get(0).getValue())
 				{
 					if(playingHands[start - 1].get(0).getSuit() < currentHand.get(0).getSuit())
 					{
-						System.out.println("zHand does not beat the last one played, re-pick or pass");
+						System.out.println("Hand does not beat the last one played, re-pick or pass");
 						playingHands[start - 1] = hands.get(start - 1).getHand();
 					}
 				}
-				else if(playingHands[start - 1].get(0).getValue() < currentHand.get(0).getValue())
+				else if(rankMin > 1 && playingHands[start - 1].get(0).getValue() < currentHand.get(0).getValue())
 				{
-					System.out.println("zzHand does not beat the last one played, re-pick or pass");
+					System.out.println("Hand does not beat the last one played, re-pick or pass");
 					playingHands[start - 1] = hands.get(start - 1).getHand();
 				}
 				else
@@ -308,7 +308,8 @@ public class Pusoy
 	
 	private static int getRank(ArrayList<Card> playingHand) 
 	{
-		playingHand.sort(Card.CardComparator);
+		if(playingHand != null)
+			playingHand.sort(Card.CardComparator);
 
 		int pairIndex = -1;
 		int rank = 0;  //assume its a BUST
