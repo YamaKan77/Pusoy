@@ -84,6 +84,7 @@ public class Pusoy
 		//think about changing start index from 0 instead of 1
 		int numberOfInputs = 0;
 		int rankMin = -1;
+
 		if(start != 4 && hands.get(start).roundDone == true)
 		{
 			start++;
@@ -96,23 +97,37 @@ public class Pusoy
 				System.out.println("Hand to beat: ");
 				for(int i = 0; i < currentHand.size(); i++)
 				{
-					System.out.println(currentHand.get(i));
+					System.out.println(currentHand.get(i)); 
 				}
 			}
-
+			
+			
 			hands.get(start).sortByValue();
 			hands.get(start).print();
 			System.out.println("Player " + (start + 1) + ", select card to play");
 			playingHands[start] = hands.get(start).getHand();
+			System.out.println(getRank(playingHands[start]));
+			System.out.println(rankMin);
+			System.out.println(hands.get(start).roundDone);
 			while(getRank(playingHands[start]) <= rankMin && hands.get(start).roundDone == false)
 			{
-
+				System.out.println("Checking rank");
 				//checks if the hand played is a single, can only play single against single
-				if(rankMin == 0 && getRank(playingHands[start]) != 0 && hands.get(start).roundDone == false)
+				if(rankMin == 0 && getRank(playingHands[start]) == 0 && hands.get(start).roundDone == false)
 				{
-					System.out.println("Current round is singles, enter a card or pass");
-					playingHands[start] = hands.get(start).getHand();
-					break;
+					
+					if(playingHands[start].get(0).getSuit() < currentHand.get(0).getSuit())
+					{
+						System.out.println("Current round is singles, enter a card or pass");
+						playingHands[start] = hands.get(start).getHand();
+					}
+					else if(rankMin > 1 && playingHands[start - 1].get(0).getValue() < currentHand.get(0).getValue())
+					{
+						System.out.println("Current round is singles, enter a card or pass");
+						playingHands[start] = hands.get(start).getHand();
+					}
+					
+					
 
 				}
 				//Checks if the and is a pair, other users can only enter another pair
@@ -120,7 +135,7 @@ public class Pusoy
 				{
 					System.out.println("Current round is pairs, enter a pair or pass");
 					playingHands[start] = hands.get(start).getHand();
-					break;
+
 				}
 				//checks if the highest card of the hand is higher than the highest card of last hand played
 				if(rankMin > 1 && playingHands[start].get(0).getValue() == currentHand.get(0).getValue())
@@ -162,7 +177,7 @@ public class Pusoy
 			start = 0;
 		}
 		
-		while(numberOfInputs <= remaining && hands.get(start).roundDone == false)
+		while(numberOfInputs <= remaining)
 		{
 			System.out.println("Second while loop");
 			if(first == false)
@@ -177,6 +192,9 @@ public class Pusoy
 			hands.get(start).print();
 			System.out.println("Player " + (start + 1) + ", select card to play");
 			playingHands[start] = hands.get(start).getHand();
+			System.out.println(getRank(playingHands[start]));
+			System.out.println(rankMin);
+			System.out.println(hands.get(start).roundDone);
 			while(getRank(playingHands[start]) <= rankMin && hands.get(start).roundDone == false)
 			{
 				//checks if the hand played is a single, can only play single against single
@@ -259,6 +277,7 @@ public class Pusoy
 		do
 		{	
 			winner = getInput(winner, remainingInRound(), first);
+			first = false;
 		} while(remainingInRound() > 1);
 		System.out.println("Round done");
 		return winner;
