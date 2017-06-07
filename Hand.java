@@ -58,6 +58,11 @@ public class Hand
 		hand.add(c);
 	}
 	
+	public int getSize()
+	{
+		return hand.size();
+	}
+	
 	/**
 	 * Sorts the hand by card value
 	 */
@@ -148,6 +153,11 @@ public class Hand
 		if(choice == 2)
 		{
 			roundDone = true;
+			for(int i = 0; i < playingHand.size(); i++)
+			{
+				System.out.print(i + " ");
+				playingHand.get(i).printCard();
+			}
 		}
 		return playingHand;
 	}

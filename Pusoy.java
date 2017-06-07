@@ -28,13 +28,12 @@ public class Pusoy
 	private static Hand hand3 = new Hand();
 	private static Hand hand4 = new Hand();
 	private static ArrayList<Hand> hands = new ArrayList<Hand>();
-	private static ArrayList<Card> playingHand1;
-	private static ArrayList<Card> playingHand2;
-	private static ArrayList<Card> playingHand3;
-	private static ArrayList<Card> playingHand4;
+	private static ArrayList<Card> playingHand1 = new ArrayList<Card>();
+	private static ArrayList<Card> playingHand2 = new ArrayList<Card>();;
+	private static ArrayList<Card> playingHand3 = new ArrayList<Card>();;
+	private static ArrayList<Card> playingHand4 = new ArrayList<Card>();;
 	private static ArrayList<Card>[] playingHands = (ArrayList<Card>[]) new ArrayList[4];
 	private static ArrayList<Card> currentHand;
-	
 	
 	public static int remainingInRound()
 	{
@@ -69,28 +68,29 @@ public class Pusoy
 	public static int startingPlayer(Hand w, Hand x, Hand y, Hand z)
 	{
 		if(w.starts())
-			return 1;
+			return 0;
 		if(x.starts())
-			return 2;
+			return 1;
 		if(y.starts())
-			return 3;
+			return 2;
 		else
-			return 4;
+			return 3;
 	}
 	
 	
 	public static int getInput(int start, int remaining, boolean first)
 	{
-		
+		System.out.println("First: " + first);
 		//think about changing start index from 0 instead of 1
 		int numberOfInputs = 0;
 		int rankMin = -1;
-		if(start != 5 && hands.get(start - 1).roundDone == true)
+		if(start != 4 && hands.get(start).roundDone == true)
 		{
 			start++;
 		}
-		while(start < 5 && hands.get(start - 1).roundDone == false)
+		while(start < 4 && hands.get(start).roundDone == false)
 		{
+			System.out.println("First while loop");
 			if(first == false)
 			{
 				System.out.println("Hand to beat: ");
@@ -100,55 +100,56 @@ public class Pusoy
 				}
 			}
 
-			hands.get(start - 1).sortByValue();
-			hands.get(start - 1).print();
-			System.out.println("Player " + start + ", select card to play");
-			playingHands[start - 1] = hands.get(start - 1).getHand();
-			while(getRank(playingHands[start - 1]) <= rankMin && hands.get(start - 1).roundDone == false)
+			hands.get(start).sortByValue();
+			hands.get(start).print();
+			System.out.println("Player " + (start + 1) + ", select card to play");
+			playingHands[start] = hands.get(start).getHand();
+			while(getRank(playingHands[start]) <= rankMin && hands.get(start).roundDone == false)
 			{
+
 				//checks if the hand played is a single, can only play single against single
-				if(rankMin == 0 && getRank(playingHands[start - 1]) != 0 && hands.get(start - 1).roundDone == false)
+				if(rankMin == 0 && getRank(playingHands[start]) != 0 && hands.get(start).roundDone == false)
 				{
 					System.out.println("Current round is singles, enter a card or pass");
-					playingHands[start - 1] = hands.get(start - 1).getHand();
+					playingHands[start] = hands.get(start).getHand();
 					break;
 
 				}
 				//Checks if the and is a pair, other users can only enter another pair
-				if(rankMin == 1 && getRank(playingHands[start - 1]) > 1 && hands.get(start - 1).roundDone == false)
+				if(rankMin == 1 && getRank(playingHands[start]) > 1 && hands.get(start).roundDone == false)
 				{
 					System.out.println("Current round is pairs, enter a pair or pass");
-					playingHands[start - 1] = hands.get(start - 1).getHand();
+					playingHands[start] = hands.get(start).getHand();
 					break;
 				}
 				//checks if the highest card of the hand is higher than the highest card of last hand played
-				if(rankMin > 1 && playingHands[start - 1].get(0).getValue() == currentHand.get(0).getValue())
+				if(rankMin > 1 && playingHands[start].get(0).getValue() == currentHand.get(0).getValue())
 				{
-					if(playingHands[start - 1].get(0).getSuit() < currentHand.get(0).getSuit())
+					if(playingHands[start].get(0).getSuit() < currentHand.get(0).getSuit())
 					{
 						System.out.println("Hand does not beat the last one played, re-pick or pass");
-						playingHands[start - 1] = hands.get(start - 1).getHand();
+						playingHands[start] = hands.get(start).getHand();
 					}
 				}
 				else if(rankMin > 1 && playingHands[start - 1].get(0).getValue() < currentHand.get(0).getValue())
 				{
 					System.out.println("Hand does not beat the last one played, re-pick or pass");
-					playingHands[start - 1] = hands.get(start - 1).getHand();
+					playingHands[start] = hands.get(start).getHand();
 				}
 				else
-					hands.get(start - 1).roundDone = true;
+					hands.get(start).roundDone = true;
 			}
-			if(hands.get(start - 1).roundDone == false)
+			if(hands.get(start).roundDone == false)
 			{
-				currentHand = playingHands[start - 1];
+				currentHand = playingHands[start];
 			}
 			
 			if(first == true)
 			{
-				rankMin = getRank(playingHands[start-1]);
+				rankMin = getRank(playingHands[start]);
 				first = false;
 			}
-			if(hands.get(start - 1).roundDone == true)
+			if(hands.get(start).roundDone == true)
 			{
 				remaining--;
 			}
@@ -156,24 +157,14 @@ public class Pusoy
 			start++;
 			
 		}
-		if(start == 5 && numberOfInputs <= remaining)
+		if(start == 4 && numberOfInputs <= remaining)
 		{
-			start = 1;
+			start = 0;
 		}
 		
-		while(numberOfInputs <= remaining && hands.get(start - 1).roundDone == false)
+		while(numberOfInputs <= remaining && hands.get(start).roundDone == false)
 		{
-			if(rankMin == 1 && getRank(playingHands[start - 1]) > 1 && hands.get(start - 1).roundDone == false)
-			{
-				System.out.println("Current round is pairs, enter a pair or pass");
-				playingHands[start - 1] = hands.get(start - 1).getHand();
-			}
-			if(rankMin == 0 && getRank(playingHands[start - 1]) != 0 && hands.get(start - 1).roundDone == false)
-			{
-				System.out.println("Current round is singles, enter a card or pass");
-				playingHands[start - 1] = hands.get(start - 1).getHand();
-
-			}
+			System.out.println("Second while loop");
 			if(first == false)
 			{
 				System.out.println("Hand to beat: ");
@@ -182,30 +173,64 @@ public class Pusoy
 					System.out.println(currentHand.get(i));
 				}
 			}
-			hands.get(start - 1).sortByValue();
-			hands.get(start - 1).print();
-			System.out.println("Player " + start + ", select card to play");
-			playingHands[start - 1] = hands.get(start - 1).getHand();
-			currentHand = playingHands[start - 1];
+			hands.get(start).sortByValue();
+			hands.get(start).print();
+			System.out.println("Player " + (start + 1) + ", select card to play");
+			playingHands[start] = hands.get(start).getHand();
+			while(getRank(playingHands[start]) <= rankMin && hands.get(start).roundDone == false)
+			{
+				//checks if the hand played is a single, can only play single against single
+				if(rankMin == 0 && getRank(playingHands[start]) != 0 && hands.get(start).roundDone == false)
+				{
+					System.out.println("Current round is singles, enter a card or pass");
+					playingHands[start] = hands.get(start).getHand();
+					break;
+
+				}
+				//Checks if the and is a pair, other users can only enter another pair
+				if(rankMin == 1 && getRank(playingHands[start]) > 1 && hands.get(start).roundDone == false)
+				{
+					System.out.println("Current round is pairs, enter a pair or pass");
+					playingHands[start] = hands.get(start).getHand();
+					break;
+				}
+				//checks if the highest card of the hand is higher than the highest card of last hand played
+				if(rankMin > 1 && playingHands[start].get(0).getValue() == currentHand.get(0).getValue())
+				{
+					if(playingHands[start].get(0).getSuit() < currentHand.get(0).getSuit())
+					{
+						System.out.println("Hand does not beat the last one played, re-pick or pass");
+						playingHands[start] = hands.get(start).getHand();
+					}
+				}
+				else if(rankMin > 1 && playingHands[start - 1].get(0).getValue() < currentHand.get(0).getValue())
+				{
+					System.out.println("Hand does not beat the last one played, re-pick or pass");
+					playingHands[start] = hands.get(start).getHand();
+				}
+				else
+					hands.get(start).roundDone = true;
+			}
 			
+			if(hands.get(start).roundDone == false)
+			{
+				currentHand = playingHands[start];
+			}
 			
-			if(hands.get(start - 1).roundDone == true)
+			if(hands.get(start).roundDone == true)
 			{
 				remaining--;
+			}
+			
+			if(first == true)
+			{
+				rankMin = getRank(playingHands[start]);
+				first = false;
 			}
 			numberOfInputs++;
 			start++;
 		}
-		if(remainingInRound() == 1)
-		{
-			for(int i = 1; i <= 4; i++)
-			{
-				if(hands.get(i - 1).roundDone == false)
-				{
-					start = i - 1;
-				}
-			}
-		}
+
 		
 		System.out.println("End of inputs, winner is: " + start);
 		return start;
@@ -214,21 +239,31 @@ public class Pusoy
 	public static void main(String[] args)
 	{
 		System.out.println("Starting a game of pusoy");
-		
+		boolean first = true;
 		startGame();
-		
+		System.out.print(playingHand1.size());
 		while(remainingInGame() > 1)
 		{
-			playRound();
+			playRound(first);
 			System.out.println("New round");
 			for(int i = 0; i < 4; i++)
 			{
 				hands.get(i).roundDone = false;
 			}
-		}
-		
-		
+		}	
 	}
+	
+	private static int playRound(boolean first)
+	{
+
+		do
+		{	
+			winner = getInput(winner, remainingInRound(), first);
+		} while(remainingInRound() > 1);
+		System.out.println("Round done");
+		return winner;
+	}
+	
 	
 	private static void startGame()
 	{
@@ -239,10 +274,7 @@ public class Pusoy
 	    hands.add(hand2);
 	    hands.add(hand3);
 	    hands.add(hand4);
-	    Card[] playedHand1 = new Card[5];
-	    Card[] playedHand2 = new Card[5];
-	    Card[] playedHand3 = new Card[5];
-	    Card[] playedHand4 = new Card[5];
+	    
 	    playingHands[0] = playingHand1;
 	    playingHands[1] = playingHand2;
 	    playingHands[2] = playingHand3;
@@ -295,32 +327,21 @@ public class Pusoy
 	    winner = startingPlayer(hand1, hand2, hand3, hand4);
 	}
 
-	private static int playRound()
-	{
-		boolean first = true;
-		do
-		{	
-			winner = getInput(winner, remainingInRound(), first);
-		} while(remainingInRound() > 1);
-		System.out.println("Round done");
-		return winner;
-	}
-	
+
 	private static int getRank(ArrayList<Card> playingHand) 
 	{
 		if(playingHand != null)
 			playingHand.sort(Card.CardComparator);
 
-		int pairIndex = -1;
 		int rank = 0;  //assume its a BUST
 		
 		//check for pair
+		System.out.println( );
 		if(playingHand.size() == 2)
 		{
 			for(int i = 0; i < playingHand.size() - 1; i++)
 			    if(playingHand.get(i).getValue() == playingHand.get(i + 1).getValue()) 
 			    {
-					pairIndex = i;
 					rank = 1;
 					i = 4;
 			    }
