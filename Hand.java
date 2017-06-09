@@ -153,12 +153,9 @@ public class Hand
 		if(choice == 2)
 		{
 			roundDone = true;
-			for(int i = 0; i < playingHand.size(); i++)
-			{
-				System.out.print(i + " ");
-				playingHand.get(i).printCard();
-			}
 		}
+		playingHand.sort(Card.CardComparator);
+		
 		return playingHand;
 	}
 	

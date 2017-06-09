@@ -106,54 +106,18 @@ public class Pusoy
 			hands.get(start).print();
 			System.out.println("Player " + (start + 1) + ", select card to play");
 			playingHands[start] = hands.get(start).getHand();
-			System.out.println(getRank(playingHands[start]));
-			System.out.println(rankMin);
-			System.out.println(hands.get(start).roundDone);
-			while(getRank(playingHands[start]) <= rankMin && hands.get(start).roundDone == false)
+			
+			
+			//check hand
+			if(first == false)
 			{
-				System.out.println("Checking rank");
-				//checks if the hand played is a single, can only play single against single
-				if(rankMin == 0 && getRank(playingHands[start]) == 0 && hands.get(start).roundDone == false)
-				{
-					
-					if(playingHands[start].get(0).getSuit() < currentHand.get(0).getSuit())
-					{
-						System.out.println("Current round is singles, enter a card or pass");
-						playingHands[start] = hands.get(start).getHand();
-					}
-					else if(rankMin > 1 && playingHands[start - 1].get(0).getValue() < currentHand.get(0).getValue())
-					{
-						System.out.println("Current round is singles, enter a card or pass");
-						playingHands[start] = hands.get(start).getHand();
-					}
-					
-					
-
-				}
-				//Checks if the and is a pair, other users can only enter another pair
-				if(rankMin == 1 && getRank(playingHands[start]) > 1 && hands.get(start).roundDone == false)
-				{
-					System.out.println("Current round is pairs, enter a pair or pass");
-					playingHands[start] = hands.get(start).getHand();
-
-				}
-				//checks if the highest card of the hand is higher than the highest card of last hand played
-				if(rankMin > 1 && playingHands[start].get(0).getValue() == currentHand.get(0).getValue())
-				{
-					if(playingHands[start].get(0).getSuit() < currentHand.get(0).getSuit())
-					{
-						System.out.println("Hand does not beat the last one played, re-pick or pass");
-						playingHands[start] = hands.get(start).getHand();
-					}
-				}
-				else if(rankMin > 1 && playingHands[start - 1].get(0).getValue() < currentHand.get(0).getValue())
-				{
-					System.out.println("Hand does not beat the last one played, re-pick or pass");
-					playingHands[start] = hands.get(start).getHand();
-				}
-				else
-					hands.get(start).roundDone = true;
+				isValid(start ,rankMin);
 			}
+			
+			
+//			System.out.println("getrank " + getRank(playingHands[start]));
+//			System.out.println("rankmin " + rankMin);
+			System.out.println("XXXround done" + hands.get(start).roundDone);
 			if(hands.get(start).roundDone == false)
 			{
 				currentHand = playingHands[start];
@@ -195,40 +159,12 @@ public class Pusoy
 			System.out.println(getRank(playingHands[start]));
 			System.out.println(rankMin);
 			System.out.println(hands.get(start).roundDone);
-			while(getRank(playingHands[start]) <= rankMin && hands.get(start).roundDone == false)
+			if(first == false)
 			{
-				//checks if the hand played is a single, can only play single against single
-				if(rankMin == 0 && getRank(playingHands[start]) != 0 && hands.get(start).roundDone == false)
-				{
-					System.out.println("Current round is singles, enter a card or pass");
-					playingHands[start] = hands.get(start).getHand();
-					break;
-
-				}
-				//Checks if the and is a pair, other users can only enter another pair
-				if(rankMin == 1 && getRank(playingHands[start]) > 1 && hands.get(start).roundDone == false)
-				{
-					System.out.println("Current round is pairs, enter a pair or pass");
-					playingHands[start] = hands.get(start).getHand();
-					break;
-				}
-				//checks if the highest card of the hand is higher than the highest card of last hand played
-				if(rankMin > 1 && playingHands[start].get(0).getValue() == currentHand.get(0).getValue())
-				{
-					if(playingHands[start].get(0).getSuit() < currentHand.get(0).getSuit())
-					{
-						System.out.println("Hand does not beat the last one played, re-pick or pass");
-						playingHands[start] = hands.get(start).getHand();
-					}
-				}
-				else if(rankMin > 1 && playingHands[start - 1].get(0).getValue() < currentHand.get(0).getValue())
-				{
-					System.out.println("Hand does not beat the last one played, re-pick or pass");
-					playingHands[start] = hands.get(start).getHand();
-				}
-				else
-					hands.get(start).roundDone = true;
+				isValid(start ,rankMin);
+				System.out.println("Done");
 			}
+			
 			
 			if(hands.get(start).roundDone == false)
 			{
@@ -282,6 +218,66 @@ public class Pusoy
 		System.out.println("Round done");
 		return winner;
 	}
+	
+	private static void isValid(int start, int rankMin)
+	{
+		boolean isValid = false;
+
+		System.out.println(playingHands[start].size());
+		System.out.println(currentHand.size());
+
+		while(!isValid)
+		{
+			System.out.println("Loop");
+			if(playingHands[start].size() == 0)
+			{
+				break;
+			}
+			if(getRank(playingHands[start]) > rankMin && hands.get(start).roundDone == false)
+			{
+				if(rankMin == 0)
+				{
+					System.out.println("Current hand is singles");
+					playingHands[start] = hands.get(start).getHand();
+				}
+				if(rankMin == 1)
+				{
+					System.out.println("Current hand is pairs");
+					playingHands[start] = hands.get(start).getHand();
+				}
+			}
+			else if(getRank(playingHands[start]) < rankMin && hands.get(start).roundDone == false)
+			{
+				System.out.println("Played hand does not beat last played");
+				playingHands[start] = hands.get(start).getHand();
+			}
+			else if(playingHands[start].get(0).getValue() < currentHand.get(0).getValue())
+			{
+				System.out.println("Played hand does not beat last played");
+				playingHands[start] = hands.get(start).getHand();
+			}
+			
+			if(playingHands[start].size() == 0)
+			{
+				break;
+			}
+			
+			if(playingHands[start].get(0).getValue() == currentHand.get(0).getValue())
+			{
+				if(playingHands[start].get(0).getSuit() < currentHand.get(0).getSuit())
+				{
+					System.out.println("Played hand does not beat last played");
+					playingHands[start] = hands.get(start).getHand();
+				}
+				else
+					isValid = true;
+			}
+			isValid = false;
+		}
+		
+	}
+		
+
 	
 	
 	private static void startGame()
