@@ -81,7 +81,7 @@ public class Pusoy
 	
 	public static int getInput(int start, int remaining, boolean first, int rankMin)
 	{
-		System.out.println("First: " + first);
+//		System.out.println("First: " + first);
 		int numberOfInputs = 0;
 		
 
@@ -91,9 +91,9 @@ public class Pusoy
 		}
 		if(start < 4 && hands.get(start).roundDone == false)
 		{
-			System.out.println("numInputs " + numberOfInputs);
-			System.out.println("remaining " + remaining);
-			System.out.println("First while loop");
+//			System.out.println("numInputs " + numberOfInputs);
+//			System.out.println("remaining " + remaining);
+//			System.out.println("First while loop");
 			if(first == false)
 			{
 				System.out.println("Player to beat: " + currentHandPlayer);
@@ -120,7 +120,7 @@ public class Pusoy
 			
 //			System.out.println("getrank " + getRank(playingHands[start]));
 //			System.out.println("rankmin " + rankMin);
-			System.out.println("XXXround done" + hands.get(start).roundDone);
+//			System.out.println("XXXround done" + hands.get(start).roundDone);
 			if(hands.get(start).roundDone == false)
 			{
 				currentHand = playingHands[start];
@@ -139,16 +139,18 @@ public class Pusoy
 			start++;
 			
 		}
-		if(start == 4 && numberOfInputs <= remaining)
-		{
-			start = 0;
-		}
 		
-		if(numberOfInputs <= remaining)
+		
+		while(numberOfInputs < remaining)
 		{
-			System.out.println("Second while loop");
-			System.out.println("numInputs " + numberOfInputs);
-			System.out.println("remaining " + remaining);
+			if(start == 4 && numberOfInputs <= remaining)
+			{
+				start = 0;
+			}
+			//Fix index out of bounds, round ends too early
+//			System.out.println("Second while loop");
+//			System.out.println("numInputs " + numberOfInputs);
+//			System.out.println("remaining " + remaining);
 			if(first == false)
 			{
 				System.out.println("Player to beat: " + currentHandPlayer);
@@ -162,13 +164,12 @@ public class Pusoy
 			hands.get(start).print();
 			System.out.println("Player " + (start + 1) + ", select card to play");
 			playingHands[start] = hands.get(start).getHand();
-			System.out.println(getRank(playingHands[start]));
-			System.out.println(rankMin);
-			System.out.println(hands.get(start).roundDone);
+//			System.out.println(getRank(playingHands[start]));
+//			System.out.println(rankMin);
+//			System.out.println(hands.get(start).roundDone);
 			if(first == false)
 			{
 				isValid(start ,rankMin);
-				System.out.println("Done");
 			}
 			
 			
@@ -188,10 +189,18 @@ public class Pusoy
 			}
 			numberOfInputs++;
 			start++;
+			if(remaining > 1)
+			{
+				numberOfInputs = 0;
+			}
 		}
 
-		
-		System.out.println("End of inputs, winner is: " + start);
+		System.out.println("Player 1 done: " + hands.get(0).roundDone);
+		System.out.println("Player 2 done: " + hands.get(1).roundDone);
+		System.out.println("Player 3 done: " + hands.get(2).roundDone);
+		System.out.println("Player 4 done: " + hands.get(3).roundDone);
+		System.out.println("End of inputs, winner is Player " + (start+1));
+
 		return start;
 	}
 	
@@ -218,12 +227,13 @@ public class Pusoy
 		do
 		{	
 			int rankMin = -1;
+			System.out.println("------Starting New Round-------");
 			winner = getInput(winner, remainingInRound(), first, rankMin);
 			for(int i = 0; i < 4; i++)
 			{
 				hands.get(i).roundDone = false;
 			}
-			first = false;
+			first = true;
 		} while(remainingInRound() > 1);
 		System.out.println("Round done");
 		return winner;
