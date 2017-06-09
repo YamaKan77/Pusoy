@@ -126,13 +126,15 @@ public class Pusoy
 				currentHand = playingHands[start];
 				currentHandPlayer = start;
 			}
+			else
+				remaining--;
 			
 			if(first == true)
 			{
 				rankMin = getRank(playingHands[start]);
 				first = false;
 			}
-			remaining = remainingInRound();
+			
 			numberOfInputs++;
 			start++;
 			
@@ -175,8 +177,9 @@ public class Pusoy
 				currentHand = playingHands[start];
 				currentHandPlayer = start;
 			}
+			else
+				remaining--;
 			
-			remaining = remainingInRound();
 			
 			if(first == true)
 			{
@@ -240,7 +243,7 @@ public class Pusoy
 			System.out.println(getRank(playingHands[start]));
 			System.out.println(rankMin);
 			System.out.println(hands.get(start).roundDone);
-			if(playingHands[start].size() == 0)
+			if(playingHands[start].size() < 1 || currentHand.size() < 1)
 			{
 				isValid = true;
 			}
@@ -264,32 +267,33 @@ public class Pusoy
 				System.out.println("Played hand does not beat last played");
 				playingHands[start] = hands.get(start).getHand();
 			}
-			if(getRank(playingHands[start]) == rankMin)
+			if(getRank(playingHands[start]) == rankMin && playingHands[start].size() != 0)
 			{
+				//index out of bound
 				if(playingHands[start].get(0).getValue() < currentHand.get(0).getValue())
 				{
 					System.out.println("Played hand does not beat last played");
 					playingHands[start] = hands.get(start).getHand();
 				}
-				
-				if(playingHands[start].size() == 0)
-				{
-					isValid = true;
-				}
 				System.out.println(playingHands[start].size());
 				System.out.println(currentHand.size());
-				if(playingHands[start].get(0).getValue() == currentHand.get(0).getValue())
+				if(playingHands[start].size() != 0)
 				{
-					if(playingHands[start].get(0).getSuit() < currentHand.get(0).getSuit())
+					if(playingHands[start].get(0).getValue() == currentHand.get(0).getValue())
 					{
-						System.out.println("Played hand does not beat last played");
-						playingHands[start] = hands.get(start).getHand();
+						if(playingHands[start].get(0).getSuit() < currentHand.get(0).getSuit())
+						{
+							System.out.println("Played hand does not beat last played");
+							playingHands[start] = hands.get(start).getHand();
+						}
+						else
+							isValid = true;
 					}
 					else
 						isValid = true;
 				}
-				else
-					isValid = true;
+				
+				
 			}
 			
 			
