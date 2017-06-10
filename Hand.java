@@ -118,16 +118,22 @@ public class Hand
 	 * @return returns an arraylist of cards that are selected
 	 * from the hand
 	 */
-	public ArrayList<Card> getHand()
+	public ArrayList<Card> getHand(boolean first)
 	{
 		ArrayList<Integer> playingHandInt = new ArrayList<Integer>();
 		ArrayList<Card> playingHand = new ArrayList<Card>();
 		int choice = 0;
-		while(choice != 1 && choice != 2)
+		while(choice != 1 && choice != 2 && first == false)
 		{
 			System.out.println("1. Select cards to play\n" + 
 							   "2. Pass");
 			choice = scan.nextInt();
+		}
+		while(first == true)
+		{
+			System.out.println("----Start of round----");
+			choice = 1;
+			first = false;
 		}
 		
 		if(choice == 1)

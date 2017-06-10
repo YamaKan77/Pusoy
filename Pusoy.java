@@ -81,9 +81,7 @@ public class Pusoy
 	
 	public static int getInput(int start, int remaining, boolean first, int rankMin)
 	{
-//		System.out.println("First: " + first);
-		int numberOfInputs = 0;
-		
+		int numberOfInputs = 0;		
 
 		if(start != 4 && hands.get(start).roundDone == true)
 		{
@@ -105,14 +103,22 @@ public class Pusoy
 			hands.get(start).sortByValue();
 			hands.get(start).print();
 			System.out.println("Player " + (start + 1) + ", select card to play");
+			boolean firstTry = true;
+			//Not reading 5 card hand ranks properly
 			do
 			{
-
-				System.out.println("Cards entered are not a valid hand");
-				playingHands[start] = hands.get(start).getHand();
-
+				if(firstTry == false)
+				{
+					System.out.println("rank: " + getRank(playingHands[start]));
+					System.out.println("Cards entered are not a valid hand");
+					playingHands[start] = hands.get(start).getHand(first);
+				}
+				firstTry = false;
+				playingHands[start] = hands.get(start).getHand(first);
+				System.out.println("XXrank: " + getRank(playingHands[start]));
 				
-			}while(getRank(playingHands[start]) == -2);
+
+			}while(getRank(playingHands[start]) < 0);
 			
 			
 			
@@ -161,11 +167,18 @@ public class Pusoy
 			hands.get(start).sortByValue();
 			hands.get(start).print();
 			System.out.println("Player " + (start + 1) + ", select card to play");
+			boolean firstTry = true;
 			do
 			{
-				
-				System.out.println("Cards entered are not a valid hand");
-				playingHands[start] = hands.get(start).getHand();
+				if(firstTry == false)
+				{
+					System.out.println("rank: " + getRank(playingHands[start]));
+					System.out.println("Cards entered are not a valid hand");
+					playingHands[start] = hands.get(start).getHand(first);
+				}
+				firstTry = false;
+				playingHands[start] = hands.get(start).getHand(first);
+				System.out.println("xxrank: " + getRank(playingHands[start]));
 
 			}while(getRank(playingHands[start]) < 0);
 
@@ -243,12 +256,14 @@ public class Pusoy
 	private static void isValid(int start, int rankMin)
 	{
 		boolean isValid = false;
-
-		System.out.println(playingHands[start].size());
+		boolean first = false;
+		
+		System.out.println("A"+playingHands[start].size());
 		System.out.println(currentHand.size());
 
 		while(!isValid)
 		{
+			System.out.println("check");
 			if(playingHands[start].size() < 1 || currentHand.size() < 1)
 			{
 				isValid = true;
@@ -258,12 +273,12 @@ public class Pusoy
 				if(rankMin == 0)
 				{
 					System.out.println("Current hand is singles");
-					playingHands[start] = hands.get(start).getHand();
+					playingHands[start] = hands.get(start).getHand(first);
 				}
 				if(rankMin == 1)
 				{
 					System.out.println("Current hand is pairs");
-					playingHands[start] = hands.get(start).getHand();
+					playingHands[start] = hands.get(start).getHand(first);
 				}
 				if(rankMin == -1)
 					rankMin = getRank(playingHands[start]);
@@ -271,18 +286,18 @@ public class Pusoy
 			if(getRank(playingHands[start]) < rankMin && hands.get(start).roundDone == false)
 			{
 				System.out.println("Played hand does not beat last played");
-				playingHands[start] = hands.get(start).getHand();
+				playingHands[start] = hands.get(start).getHand(first);
 			}
 			if(getRank(playingHands[start]) == rankMin && playingHands[start].size() != 0)
 			{
 				//index out of bound
+				System.out.println("Checking 5 card hand 293");
+
 				if(playingHands[start].get(0).getValue() < currentHand.get(0).getValue())
 				{
 					System.out.println("Played hand does not beat last played");
-					playingHands[start] = hands.get(start).getHand();
+					playingHands[start] = hands.get(start).getHand(first);
 				}
-				System.out.println(playingHands[start].size());
-				System.out.println(currentHand.size());
 				if(playingHands[start].size() != 0)
 				{
 					if(playingHands[start].get(0).getValue() == currentHand.get(0).getValue())
@@ -290,21 +305,21 @@ public class Pusoy
 						if(playingHands[start].get(0).getSuit() < currentHand.get(0).getSuit())
 						{
 							System.out.println("Played hand does not beat last played");
-							playingHands[start] = hands.get(start).getHand();
+							playingHands[start] = hands.get(start).getHand(first);
 						}
 						else
 							isValid = true;
 					}
+					else if(playingHands[start].get(0).getValue() < currentHand.get(0).getValue())
+					{
+						System.out.println("Played hand does not beat last played");
+						playingHands[start] = hands.get(start).getHand(first);
+					}
 					else
 						isValid = true;
-				}
-				
-				
-			}
-			
-			
+				}				
+			}	
 		}
-		
 	}
 		
 
@@ -409,9 +424,9 @@ public class Pusoy
 			    }
 	
 			//check for straight
-			if((playingHand.get(4).getValue() - playingHand.get(0).getValue() == 4) ||
+			if((playingHand.get(0).getValue() - playingHand.get(4).getValue() == 4) ||
 			       (playingHand.get(3).getValue() - playingHand.get(0).getValue() == 3 && playingHand.get(4).getValue() == 15 && playingHand.get(0).getValue() == 3)) {
-				rank = 4;
+				rank = 2;
 			    }
 	
 			//check for flush (if we haven't already found any pairs)
@@ -419,7 +434,7 @@ public class Pusoy
 			if(rank == 0 || rank == 4) {
 			    flush = true;
 			    for(int i = 0; i < 4; i++)
-				if(playingHand.get(i).getSuit() != playingHand.get(i).getSuit())
+				if(playingHand.get(i).getSuit() != playingHand.get(i+1).getSuit())
 				    flush = false;
 			    if(flush && rank == 4)
 			    	rank = 6; //straight flush!
@@ -431,8 +446,10 @@ public class Pusoy
 			if(rank == 6 && playingHand.get(4).getValue() == 14 && playingHand.get(0).getValue() == 10)
 			    rank = 7; //royal flush!
 			
-			else
+			if(rank == 0)
+			{
 				rank = -1;
+			}
 		}
 		
 		return rank;
