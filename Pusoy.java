@@ -91,9 +91,6 @@ public class Pusoy
 		}
 		if(start < 4 && hands.get(start).roundDone == false)
 		{
-//			System.out.println("numInputs " + numberOfInputs);
-//			System.out.println("remaining " + remaining);
-//			System.out.println("First while loop");
 			if(first == false)
 			{
 				System.out.println("Player to beat: " + currentHandPlayer);
@@ -108,7 +105,15 @@ public class Pusoy
 			hands.get(start).sortByValue();
 			hands.get(start).print();
 			System.out.println("Player " + (start + 1) + ", select card to play");
-			playingHands[start] = hands.get(start).getHand();
+			do
+			{
+
+				System.out.println("Cards entered are not a valid hand");
+				playingHands[start] = hands.get(start).getHand();
+
+				
+			}while(getRank(playingHands[start]) == -2);
+			
 			
 			
 			//check hand
@@ -117,10 +122,6 @@ public class Pusoy
 				isValid(start ,rankMin);
 			}
 			
-			
-//			System.out.println("getrank " + getRank(playingHands[start]));
-//			System.out.println("rankmin " + rankMin);
-//			System.out.println("XXXround done" + hands.get(start).roundDone);
 			if(hands.get(start).roundDone == false)
 			{
 				currentHand = playingHands[start];
@@ -147,10 +148,7 @@ public class Pusoy
 			{
 				start = 0;
 			}
-			//Fix index out of bounds, round ends too early
-//			System.out.println("Second while loop");
-//			System.out.println("numInputs " + numberOfInputs);
-//			System.out.println("remaining " + remaining);
+
 			if(first == false)
 			{
 				System.out.println("Player to beat: " + currentHandPlayer);
@@ -163,10 +161,14 @@ public class Pusoy
 			hands.get(start).sortByValue();
 			hands.get(start).print();
 			System.out.println("Player " + (start + 1) + ", select card to play");
-			playingHands[start] = hands.get(start).getHand();
-//			System.out.println(getRank(playingHands[start]));
-//			System.out.println(rankMin);
-//			System.out.println(hands.get(start).roundDone);
+			do
+			{
+				
+				System.out.println("Cards entered are not a valid hand");
+				playingHands[start] = hands.get(start).getHand();
+
+			}while(getRank(playingHands[start]) < 0);
+
 			if(first == false)
 			{
 				isValid(start ,rankMin);
@@ -209,7 +211,6 @@ public class Pusoy
 		System.out.println("Starting a game of pusoy");
 		boolean first = true;
 		startGame();
-		System.out.print(playingHand1.size());
 		while(remainingInGame() > 1)
 		{
 			playRound(first);
@@ -248,11 +249,6 @@ public class Pusoy
 
 		while(!isValid)
 		{
-			System.out.println("Loop");
-			System.out.println(isValid);
-			System.out.println(getRank(playingHands[start]));
-			System.out.println(rankMin);
-			System.out.println(hands.get(start).roundDone);
 			if(playingHands[start].size() < 1 || currentHand.size() < 1)
 			{
 				isValid = true;
@@ -385,7 +381,6 @@ public class Pusoy
 		int rank = 0;  //assume its a BUST
 		
 		//check for pair
-		System.out.println( );
 		if(playingHand.size() == 2)
 		{
 			for(int i = 0; i < playingHand.size() - 1; i++)
@@ -435,6 +430,9 @@ public class Pusoy
 			//check for royal flush (if it's a straight flush)
 			if(rank == 6 && playingHand.get(4).getValue() == 14 && playingHand.get(0).getValue() == 10)
 			    rank = 7; //royal flush!
+			
+			else
+				rank = -1;
 		}
 		
 		return rank;

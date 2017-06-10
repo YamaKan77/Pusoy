@@ -147,10 +147,6 @@ public class Hand
 		    }
 			Collections.sort(playingHandInt);
 			Collections.reverse(playingHandInt);
-			for(int i = 0; i < playingHandInt.size(); i++)
-		    {
-		    	System.out.println(playingHandInt.get(i));
-		    }
 		    for(int i = 0; i < playingHandInt.size(); i++)
 		    {
 		    	if(playingHandInt.get(i)!= 0)
