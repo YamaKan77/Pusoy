@@ -83,15 +83,7 @@ public class Pusoy
 	{
 		int numberOfInputs = 0;		
 
-		while(hands.get(start).roundDone == true)
-		{
-			if(start < 4)
-				start++;
-			if(start == 4)
-				start = 0;
-			
-			
-		}
+		
 		if(start < 4 && hands.get(start).roundDone == false)
 		{
 			if(first == false)
@@ -125,12 +117,12 @@ public class Pusoy
 				System.out.println("XXrank: " + getRank(playingHands[start]));
 				
 
-			}while(getRank(playingHands[start]) < 0);
+			}while(getRank(playingHands[start]) < 0 && hands.get(start).gameDone == false);
 			
 			
 			
 			//check hand
-			if(first == false)
+			if(first == false && hands.get(start).roundDone == false)
 			{
 				isValid(start ,rankMin);
 			}
@@ -149,6 +141,11 @@ public class Pusoy
 			else
 				remaining--;
 			
+			if(hands.get(start).getSize() == 0)
+			{
+				hands.get(start).gameDone = true;
+			}
+			
 			if(first == true)
 			{
 				rankMin = getRank(playingHands[start]);
@@ -163,6 +160,10 @@ public class Pusoy
 		
 		while(numberOfInputs < remaining)
 		{
+			System.out.println("Player 1 gamedone: " + hands.get(0).gameDone);
+			System.out.println("Player 2 gamedone: " + hands.get(1).gameDone);
+			System.out.println("Player 3 gamedone: " + hands.get(2).gameDone);
+			System.out.println("Player 4 gamedone: " + hands.get(3).gameDone);
 			if(start == 4 && numberOfInputs <= remaining)
 			{
 				start = 0;
@@ -183,6 +184,7 @@ public class Pusoy
 			boolean firstTry = true;
 			do
 			{
+				
 				if(firstTry == false)
 				{
 					System.out.println("rank: " + getRank(playingHands[start]));
@@ -196,8 +198,8 @@ public class Pusoy
 				System.out.println("xxrank: " + getRank(playingHands[start]));
 
 			}while(getRank(playingHands[start]) < 0 && hands.get(start).gameDone == false);
-
-			if(first == false)
+			System.out.println("ddDD");
+			if(first == false && hands.get(start).roundDone == false)
 			{
 				isValid(start ,rankMin);
 			}
@@ -217,6 +219,10 @@ public class Pusoy
 			else
 				remaining--;
 			
+			if(hands.get(start).getSize() == 0)
+			{
+				hands.get(start).gameDone = true;
+			}
 			
 			if(first == true)
 			{
@@ -229,8 +235,18 @@ public class Pusoy
 			{
 				numberOfInputs = 0;
 			}
+			
+			if(start == 4)
+				start = 0;
+			if(hands.get(0).roundDone == true)
+			{
+				System.out.println("ddddd");
+				start++;
+			}
 		}
 
+		
+		
 		System.out.println("Player 1 done: " + hands.get(0).roundDone);
 		System.out.println("Player 2 done: " + hands.get(1).roundDone);
 		System.out.println("Player 3 done: " + hands.get(2).roundDone);
@@ -283,6 +299,10 @@ public class Pusoy
 		
 		System.out.println("A"+playingHands[start].size());
 		System.out.println(currentHand.size());
+		if(playingHands[start].size() == 0)
+		{
+			isValid = true;
+		}
 
 		while(!isValid)
 		{
@@ -306,6 +326,10 @@ public class Pusoy
 				}
 				if(rankMin == -1)
 					isValid = true;
+				if(rankMin > 1)
+				{
+					isValid = true;
+				}
 			}
 			if(getRank(playingHands[start]) < rankMin && hands.get(start).roundDone == false)
 			{
