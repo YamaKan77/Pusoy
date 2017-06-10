@@ -83,10 +83,15 @@ public class Pusoy
 	{
 		int numberOfInputs = 0;		
 
-		if(start != 4 && hands.get(start).roundDone == true)
-		{
-			start++;
-		}
+//		while(hands.get(start).roundDone == true)
+//		{
+//			if(start < 4)
+//				start++;
+//			if(start == 4)
+//				start = 0;
+//			
+//			
+//		}
 		if(start < 4 && hands.get(start).roundDone == false)
 		{
 			if(first == false)
@@ -115,6 +120,8 @@ public class Pusoy
 				}
 				firstTry = false;
 				playingHands[start] = hands.get(start).getHand(first);
+				if(hands.get(start).roundDone == true)
+					break;
 				System.out.println("XXrank: " + getRank(playingHands[start]));
 				
 
@@ -128,8 +135,14 @@ public class Pusoy
 				isValid(start ,rankMin);
 			}
 			
+			
 			if(hands.get(start).roundDone == false)
 			{
+				for(int i = 0; i < playingHands[start].size(); i++)
+			    {
+			    	hands.get(start).remove(playingHands[start].get(i));
+			    }
+				
 				currentHand = playingHands[start];
 				currentHandPlayer = start;
 			}
@@ -178,6 +191,8 @@ public class Pusoy
 				}
 				firstTry = false;
 				playingHands[start] = hands.get(start).getHand(first);
+				if(hands.get(start).roundDone == true)
+					break;
 				System.out.println("xxrank: " + getRank(playingHands[start]));
 
 			}while(getRank(playingHands[start]) < 0);
@@ -188,8 +203,14 @@ public class Pusoy
 			}
 			
 			
+			
+			
 			if(hands.get(start).roundDone == false)
 			{
+				for(int i = 0; i < playingHands[start].size(); i++)
+			    {
+			    	hands.get(start).remove(playingHands[start].get(i));
+			    }
 				currentHand = playingHands[start];
 				currentHandPlayer = start;
 			}
@@ -214,6 +235,8 @@ public class Pusoy
 		System.out.println("Player 2 done: " + hands.get(1).roundDone);
 		System.out.println("Player 3 done: " + hands.get(2).roundDone);
 		System.out.println("Player 4 done: " + hands.get(3).roundDone);
+		//Round is still ending early when  not everybody has passed
+		System.out.println("Remaining in round: " + remainingInRound());
 		System.out.println("End of inputs, winner is Player " + (start+1));
 
 		return start;
@@ -270,6 +293,7 @@ public class Pusoy
 			}
 			if(getRank(playingHands[start]) > rankMin && hands.get(start).roundDone == false)
 			{
+				System.out.println("Checking 5 card hand 296");
 				if(rankMin == 0)
 				{
 					System.out.println("Current hand is singles");
@@ -281,7 +305,7 @@ public class Pusoy
 					playingHands[start] = hands.get(start).getHand(first);
 				}
 				if(rankMin == -1)
-					rankMin = getRank(playingHands[start]);
+					isValid = true;
 			}
 			if(getRank(playingHands[start]) < rankMin && hands.get(start).roundDone == false)
 			{
@@ -291,7 +315,7 @@ public class Pusoy
 			if(getRank(playingHands[start]) == rankMin && playingHands[start].size() != 0)
 			{
 				//index out of bound
-				System.out.println("Checking 5 card hand 293");
+				System.out.println("Checking 5 card hand 318");
 
 				if(playingHands[start].get(0).getValue() < currentHand.get(0).getValue())
 				{
@@ -319,6 +343,7 @@ public class Pusoy
 						isValid = true;
 				}				
 			}	
+			
 		}
 	}
 		
@@ -393,7 +418,12 @@ public class Pusoy
 		if(playingHand != null)
 			playingHand.sort(Card.CardComparator);
 
-		int rank = 0;  //assume its a BUST
+		int rank = -1;  //assume its a BUST
+		if(playingHand.size() == 1)
+		{
+			rank = 0;
+		}
+		
 		
 		//check for pair
 		if(playingHand.size() == 2)
@@ -410,22 +440,26 @@ public class Pusoy
 		{
 			//check for 3 of a kind or full house
 			for(int i = 0; i < 3; i++)
-			    if(playingHand.get(i).getValue() == playingHand.get(i + 1).getValue() && playingHand.get(i + 1).getValue() == playingHand.get(i + 2).getValue()) 
+			    if(playingHand.get(i).getValue() == playingHand.get(i + 1).getValue() && 
+			    playingHand.get(i + 1).getValue() == playingHand.get(i + 2).getValue()) 
 			    {
-			    	if(i==0 && playingHand.get(3).getValue() == playingHand.get(4).getValue() || i==2 && playingHand.get(0).getValue() == playingHand.get(1).getValue())
+			    	if(i==0 && playingHand.get(3).getValue() == playingHand.get(4).getValue() || 
+			    			i==2 && playingHand.get(0).getValue() == playingHand.get(1).getValue())
 			    		rank = 4;
 			    }
 			
 			//check for 4 of a kind
 			for(int i = 0; i < 2; i++)
-			    if(playingHand.get(i).getValue() == playingHand.get(i + 1).getValue() && playingHand.get(i + 1).getValue() == playingHand.get(i + 2).getValue() &&
+			    if(playingHand.get(i).getValue() == playingHand.get(i + 1).getValue() && 
+			    playingHand.get(i + 1).getValue() == playingHand.get(i + 2).getValue() &&
 			    		playingHand.get(i + 2).getValue() == playingHand.get(i + 3).getValue()) {
 				rank = 5;
 			    }
 	
 			//check for straight
 			if((playingHand.get(0).getValue() - playingHand.get(4).getValue() == 4) ||
-			       (playingHand.get(3).getValue() - playingHand.get(0).getValue() == 3 && playingHand.get(4).getValue() == 15 && playingHand.get(0).getValue() == 3)) {
+			       (playingHand.get(3).getValue() - playingHand.get(0).getValue() == 3 &&
+			       playingHand.get(4).getValue() == 15 && playingHand.get(0).getValue() == 3)) {
 				rank = 2;
 			    }
 	
@@ -446,10 +480,10 @@ public class Pusoy
 			if(rank == 6 && playingHand.get(4).getValue() == 14 && playingHand.get(0).getValue() == 10)
 			    rank = 7; //royal flush!
 			
-			if(rank == 0)
-			{
-				rank = -1;
-			}
+//			if(rank == 0)
+//			{
+//				rank = -1;
+//			}
 		}
 		
 		return rank;

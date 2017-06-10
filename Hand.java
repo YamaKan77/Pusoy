@@ -112,6 +112,18 @@ public class Hand
 		}
 	}
 	
+	public void remove(Card c)
+	{
+		for(int i = 0; i < hand.size(); i++)
+		{
+			if(hand.get(i).getValue() == c.getValue() &&
+					hand.get(i).getSuit() == c.getSuit())
+			{
+				hand.remove(i);
+			}
+		}
+	}
+	
 	/**
 	 * Gets which cards are going to be played for
 	 * the round
@@ -158,13 +170,6 @@ public class Hand
 		    	if(playingHandInt.get(i)!= 0)
 		    	{
 		    		playingHand.add(hand.get(playingHandInt.get(i) - 1));
-		    	}
-		    }
-		    for(int i = 0; i < playingHandInt.size(); i++)
-		    {
-		    	if(playingHandInt.get(i)!= 0)
-		    	{
-		    		hand.remove(playingHandInt.get(i) - 1);
 		    	}
 		    }
 		    
