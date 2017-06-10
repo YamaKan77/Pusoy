@@ -83,15 +83,15 @@ public class Pusoy
 	{
 		int numberOfInputs = 0;		
 
-//		while(hands.get(start).roundDone == true)
-//		{
-//			if(start < 4)
-//				start++;
-//			if(start == 4)
-//				start = 0;
-//			
-//			
-//		}
+		while(hands.get(start).roundDone == true)
+		{
+			if(start < 4)
+				start++;
+			if(start == 4)
+				start = 0;
+			
+			
+		}
 		if(start < 4 && hands.get(start).roundDone == false)
 		{
 			if(first == false)
@@ -109,7 +109,7 @@ public class Pusoy
 			hands.get(start).print();
 			System.out.println("Player " + (start + 1) + ", select card to play");
 			boolean firstTry = true;
-			//Not reading 5 card hand ranks properly
+
 			do
 			{
 				if(firstTry == false)
@@ -195,7 +195,7 @@ public class Pusoy
 					break;
 				System.out.println("xxrank: " + getRank(playingHands[start]));
 
-			}while(getRank(playingHands[start]) < 0);
+			}while(getRank(playingHands[start]) < 0 && hands.get(start).gameDone == false);
 
 			if(first == false)
 			{

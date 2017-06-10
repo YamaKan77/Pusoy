@@ -135,50 +135,57 @@ public class Hand
 		ArrayList<Integer> playingHandInt = new ArrayList<Integer>();
 		ArrayList<Card> playingHand = new ArrayList<Card>();
 		int choice = 0;
-		while(choice != 1 && choice != 2 && first == false)
+		if(hand.size() == 0)
+			gameDone = true;
+		
+		if(gameDone == false)
 		{
-			System.out.println("1. Select cards to play\n" + 
-							   "2. Pass");
-			choice = scan.nextInt();
-		}
-		while(first == true)
-		{
-			System.out.println("----Start of round----");
-			choice = 1;
-			first = false;
+			while(choice != 1 && choice != 2 && first == false)
+			{
+				System.out.println("1. Select cards to play\n" + 
+								   "2. Pass");
+				choice = scan.nextInt();
+			}
+			while(first == true)
+			{
+				System.out.println("----Start of round----");
+				choice = 1;
+				first = false;
+			}
+			
+			if(choice == 1)
+			{
+				int count = 0;
+				System.out.print("Which card(s) do you want to play(0 for no other card): ");
+				for(int i = 0; i < 5; i++)
+				{
+					int num = scan.nextInt();
+					if(num < 0 || num > hand.size())
+					{
+						System.out.println("Invalid card index, please enter a different number");
+						num = scan.nextInt();
+					}
+					playingHandInt.add(num);
+		    		count++;
+			    }
+				Collections.sort(playingHandInt);
+				Collections.reverse(playingHandInt);
+			    for(int i = 0; i < playingHandInt.size(); i++)
+			    {
+			    	if(playingHandInt.get(i)!= 0)
+			    	{
+			    		playingHand.add(hand.get(playingHandInt.get(i) - 1));
+			    	}
+			    }
+			    
+			}
+			if(choice == 2)
+			{
+				roundDone = true;
+			}
+			playingHand.sort(Card.CardComparator);
 		}
 		
-		if(choice == 1)
-		{
-			int count = 0;
-			System.out.print("Which card(s) do you want to play(0 for no other card): ");
-			for(int i = 0; i < 5; i++)
-			{
-				int num = scan.nextInt();
-				if(num < 0)
-				{
-					System.out.println("Invalid card index, please enter a different number");
-					num = scan.nextInt();
-				}
-				playingHandInt.add(num);
-	    		count++;
-		    }
-			Collections.sort(playingHandInt);
-			Collections.reverse(playingHandInt);
-		    for(int i = 0; i < playingHandInt.size(); i++)
-		    {
-		    	if(playingHandInt.get(i)!= 0)
-		    	{
-		    		playingHand.add(hand.get(playingHandInt.get(i) - 1));
-		    	}
-		    }
-		    
-		}
-		if(choice == 2)
-		{
-			roundDone = true;
-		}
-		playingHand.sort(Card.CardComparator);
 		
 		return playingHand;
 	}
