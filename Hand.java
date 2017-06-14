@@ -23,6 +23,7 @@ public class Hand
 	boolean roundDone; //If the player has passed in the round
 	boolean gameDone; //If the player has played all of their cards
 	boolean start; //If the player starts the game
+	String ID;
 	
 	/**
 	 * Constructs an arraylist of cards. Sets the roundDone,
@@ -34,6 +35,7 @@ public class Hand
 		roundDone = false;
 		gameDone = false;
 		start = false;
+		ID = null;
 	}
 	
 	/**
@@ -47,6 +49,7 @@ public class Hand
 		roundDone = false;
 		gameDone = false;
 		start = false;
+		ID = null;
 	}
 	
 	/**
