@@ -39,14 +39,11 @@ public class Pusoy
 	public static int remainingInRound()
 	{
 		int numLeft = 0;
-		if(!hand1.roundDone)
-			numLeft++;
-		if(!hand2.roundDone)
-			numLeft++;
-		if(!hand3.roundDone)
-			numLeft++;
-		if(!hand4.roundDone)
-			numLeft++;
+		for(int i = 0; i < hands.size(); i++)
+		{
+			if(!hands.get(i).roundDone)
+				numLeft++;
+		}
 		
 		return numLeft;
 	}
@@ -54,14 +51,11 @@ public class Pusoy
 	public static int remainingInGame()
 	{
 		int numLeft = 0;
-		if(!hand1.gameDone)
-			numLeft++;
-		if(!hand2.gameDone)
-			numLeft++;
-		if(!hand3.gameDone)
-			numLeft++;
-		if(!hand4.gameDone)
-			numLeft++;
+		for(int i = 0; i < hands.size(); i++)
+		{
+			if(!hands.get(i).gameDone)
+				numLeft++;
+		}
 		
 		return numLeft;
 	}
@@ -173,20 +167,23 @@ public class Pusoy
 			
 		}
 		
-		
+		//error if player 3 finishes, start is out of index next turn
 		while(numberOfInputs < remaining && remaining > 1)
 		{
-			if(start < hands.size())
+			if(start == hands.size())
+				start = 0;
+			//doesnt correctly return the winner of the round sometimes
+			if(start < hands.size() && hands.get(start).roundDone == true)
 			{
 				while(hands.get(start).roundDone == true)
 				{
-					start++;
+					if(start < hands.size())
+						start++;
+					else
+						start = 0;
 				}
 			}
-			else
-				start = 0;
 			
-			System.out.println(remainingInRound());
 			for(int i = 0; i < hands.size(); i++)
 			{
 				System.out.println(hands.get(i).ID + " rounddone: " + hands.get(i).roundDone);
@@ -267,6 +264,8 @@ public class Pusoy
 				hands.remove(start);
 			}
 			
+			
+			
 			if(first == true)
 			{
 				rankMin = getRank(playingHands[start]);
@@ -287,13 +286,21 @@ public class Pusoy
 		}
 
 		
-		for(int i = 0; i < hands.size(); i++)
+//		for(int i = 0; i < hands.size(); i++)
+//		{
+//			System.out.println(hands.get(i).ID + " done: " + hands.get(i).roundDone);
+//		}
+//		
+//		
+		if(start < hands.size() && hands.get(start).gameDone == false)
 		{
-			System.out.println(hands.get(i).ID + " done: " + hands.get(i).roundDone);
+			while(hands.get(start).roundDone == true)
+			{
+				start++;
+			}
 		}
-		
-		
-		
+		else
+			start = 0;
 		
 		//Round is still ending early when  not everybody has passed
 		System.out.println("numberOfInputs : " + numberOfInputs);
@@ -332,11 +339,11 @@ public class Pusoy
 			winner = getInput(winner, remainingInRound(), first, rankMin);
 			for(int i = 0; i < hands.size(); i++)
 			{
-				if(hands.get(i).gameDone = false)
-				{
-					hands.get(i).roundDone = false;
-				}
-				
+//				if(hands.get(i).gameDone = false)
+//				{
+//					hands.get(i).roundDone = false;
+//				}
+				hands.get(i).roundDone = false;
 			}
 			first = true;
 		} while(remainingInRound() > 1);
@@ -349,8 +356,6 @@ public class Pusoy
 		boolean isValid = false;
 		boolean first = false;
 		
-		System.out.println("A"+playingHands[start].size());
-		System.out.println(currentHand.size());
 		if(playingHands[start].size() == 0)
 		{
 			isValid = true;
@@ -391,7 +396,7 @@ public class Pusoy
 			if(getRank(playingHands[start]) == rankMin && playingHands[start].size() != 0)
 			{
 				//index out of bound
-				System.out.println("Checking 5 card hand 318");
+				System.out.println("Checking 5 card hand 408");
 
 				if(playingHands[start].get(0).getValue() < currentHand.get(0).getValue())
 				{
