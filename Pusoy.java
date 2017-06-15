@@ -174,16 +174,22 @@ public class Pusoy
 		}
 		
 		
-		while(numberOfInputs < remaining)
+		while(numberOfInputs < remaining && remaining > 1)
 		{
+			if(start < hands.size())
+			{
+				while(hands.get(start).roundDone == true)
+				{
+					start++;
+				}
+			}
+			else
+				start = 0;
+			
+			System.out.println(remainingInRound());
 			for(int i = 0; i < hands.size(); i++)
 			{
-				System.out.println(hands.get(i).ID + " gamedone: " + hands.get(i).gameDone);
-			}
-
-			if(start == hands.size() && numberOfInputs <= remaining)
-			{
-				start = 0;
+				System.out.println(hands.get(i).ID + " rounddone: " + hands.get(i).roundDone);
 			}
 
 			if(first == false && hands.get(start).roundDone == false && hands.get(start).gameDone == false)
@@ -261,18 +267,12 @@ public class Pusoy
 				hands.remove(start);
 			}
 			
-//			if(hands.get(start).roundDone == true && hands.get(start).gameDone == false)
-//			{
-//				System.out.println("ddddd");
-//				start++;
-//			}
 			if(first == true)
 			{
 				rankMin = getRank(playingHands[start]);
 				first = false;
 			}
-		
-//			numberOfInputs++;
+
 			start++;
 			if(remaining > 1)
 			{
