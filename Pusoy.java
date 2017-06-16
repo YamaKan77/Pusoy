@@ -35,6 +35,7 @@ public class Pusoy
 	private static ArrayList<Card>[] playingHands = (ArrayList<Card>[]) new ArrayList[4];
 	private static ArrayList<Card> currentHand;
 	private static int currentHandPlayer;
+	private static ArrayList<String> winners = new ArrayList<String>();
 	
 	public static int remainingInRound()
 	{
@@ -110,7 +111,6 @@ public class Pusoy
 					playingHands[start] = hands.get(start).getHand(first);
 					if(hands.get(start).roundDone == true)
 						break;
-					System.out.println("xxrank: " + getRank(playingHands[start]));
 				}
 				
 
@@ -152,7 +152,7 @@ public class Pusoy
 				
 
 				hands.get(start).gameDone = true;
-
+				winners.add(hands.get(start).ID);
 				remaining = 1;
 				hands.remove(start);
 			}
@@ -166,8 +166,6 @@ public class Pusoy
 			start++;
 			
 		}
-		
-		//error if player 3 finishes, start is out of index next turn
 		while(numberOfInputs < remaining && remaining > 1)
 		{
 			if(start == hands.size())
@@ -179,7 +177,7 @@ public class Pusoy
 				{
 					if(start < hands.size())
 						start++;
-					else
+					if(start == hands.size())
 						start = 0;
 				}
 			}
@@ -218,12 +216,10 @@ public class Pusoy
 					playingHands[start] = hands.get(start).getHand(first);
 					if(hands.get(start).roundDone == true)
 						break;
-					System.out.println("xxrank: " + getRank(playingHands[start]));
 				}
 				
 
 			}while(getRank(playingHands[start]) < 0 && hands.get(start).gameDone == false);
-			System.out.println("ddDD");
 			if(first == false && hands.get(start).roundDone == false)
 			{
 				isValid(start ,rankMin);
@@ -261,6 +257,7 @@ public class Pusoy
 				hands.get(start).gameDone = true;
 
 				remaining = 1;
+				winners.add(hands.get(start).ID);
 				hands.remove(start);
 			}
 			
@@ -277,22 +274,13 @@ public class Pusoy
 			{
 				numberOfInputs = 0;
 			}
-			System.out.println("numberOfInputs : " + numberOfInputs);
-			System.out.println("Remaining in round: " + remaining);
 			
 			if(start == 4)
 				start = 0;
 			
 		}
-
 		
-//		for(int i = 0; i < hands.size(); i++)
-//		{
-//			System.out.println(hands.get(i).ID + " done: " + hands.get(i).roundDone);
-//		}
-//		
-//		
-		if(start < hands.size() && hands.get(start).gameDone == false)
+		if(start < hands.size())
 		{
 			while(hands.get(start).roundDone == true)
 			{
@@ -302,9 +290,6 @@ public class Pusoy
 		else
 			start = 0;
 		
-		//Round is still ending early when  not everybody has passed
-		System.out.println("numberOfInputs : " + numberOfInputs);
-		System.out.println("Remaining in round: " + remaining);
 		System.out.println("End of inputs, winner is Player " + (start+1));
 
 		return start;
@@ -321,12 +306,18 @@ public class Pusoy
 		while(remainingInGame() > 1)
 		{
 			playRound(first);
-			System.out.println("New round");
 			for(int i = 0; i < hands.size(); i++)
 			{
 				hands.get(i).roundDone = false;
 			}
 		}	
+		
+		System.out.println("Game Done");
+		System.out.println("Winning Order: ");
+		for(int i = 0; i < winners.size(); i++)
+		{
+			System.out.print(i + ". " + winners.get(i) + " ");
+		}
 	}
 	
 	private static int playRound(boolean first)
@@ -339,15 +330,12 @@ public class Pusoy
 			winner = getInput(winner, remainingInRound(), first, rankMin);
 			for(int i = 0; i < hands.size(); i++)
 			{
-//				if(hands.get(i).gameDone = false)
-//				{
-//					hands.get(i).roundDone = false;
-//				}
 				hands.get(i).roundDone = false;
 			}
+			
 			first = true;
 		} while(remainingInRound() > 1);
-		System.out.println("Round done");
+		winners.add(hands.get(0).ID);
 		return winner;
 	}
 	
@@ -368,7 +356,7 @@ public class Pusoy
 			{
 				isValid = true;
 			}
-			if(getRank(playingHands[start]) > rankMin && hands.get(start).roundDone == false)
+			else if(getRank(playingHands[start]) > rankMin && hands.get(start).roundDone == false)
 			{
 				System.out.println("Checking 5 card hand 296");
 				if(rankMin == 0)
@@ -388,15 +376,15 @@ public class Pusoy
 					isValid = true;
 				}
 			}
-			if(getRank(playingHands[start]) < rankMin && hands.get(start).roundDone == false)
+			else if(getRank(playingHands[start]) < rankMin && hands.get(start).roundDone == false)
 			{
 				System.out.println("Played hand does not beat last played");
 				playingHands[start] = hands.get(start).getHand(first);
 			}
-			if(getRank(playingHands[start]) == rankMin && playingHands[start].size() != 0)
+			else if(getRank(playingHands[start]) == rankMin && playingHands[start].size() != 0)
 			{
 				//index out of bound
-				System.out.println("Checking 5 card hand 408");
+				System.out.println("Checking 5 card hand 386");
 
 				if(playingHands[start].get(0).getValue() < currentHand.get(0).getValue())
 				{
