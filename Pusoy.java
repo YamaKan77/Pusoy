@@ -168,7 +168,7 @@ public class Pusoy
 		}
 		while(numberOfInputs < remaining && remaining > 1)
 		{
-			if(start == hands.size())
+			if(start >= hands.size())
 				start = 0;
 			//doesnt correctly return the winner of the round sometimes
 			if(start < hands.size() && hands.get(start).roundDone == true)
@@ -202,6 +202,7 @@ public class Pusoy
 			hands.get(start).print();
 			System.out.println(hands.get(start).ID + ", select card to play");
 			boolean firstTry = true;
+			//Sometimes need to input twice
 			do
 			{
 				if(hands.get(start).gameDone == false)
@@ -212,8 +213,11 @@ public class Pusoy
 						System.out.println("Cards entered are not a valid hand");
 						playingHands[start] = hands.get(start).getHand(first);
 					}
-					firstTry = false;
-					playingHands[start] = hands.get(start).getHand(first);
+					else
+					{
+						firstTry = false;
+						playingHands[start] = hands.get(start).getHand(first);
+					}
 					if(hands.get(start).roundDone == true)
 						break;
 				}
@@ -284,11 +288,13 @@ public class Pusoy
 		{
 			while(hands.get(start).roundDone == true)
 			{
-				start++;
+				if(start < hands.size())
+					start++;
+				if(start == hands.size())
+					start = 0;
 			}
 		}
-		else
-			start = 0;
+
 		
 		System.out.println("End of inputs, winner is Player " + (start+1));
 
@@ -448,57 +454,30 @@ public class Pusoy
 	    }
 	    
 	    int dealTo = 0;
-//	    while(deck.cardsLeft() != 0)
-//	    {
-//	    	if(dealTo == 0)
-//	    	{
-//	    		hand1.addCard(deck.dealCard());
-//	    		dealTo++;
-//	    	}
-//	    	if(dealTo == 1)
-//	    	{
-//	    		hand2.addCard(deck.dealCard());
-//	    		dealTo++;
-//	    	}
-//	    	if(dealTo == 2)
-//	    	{
-//	    		hand3.addCard(deck.dealCard());
-//	    		dealTo++;
-//	    	}
-//	    	if(dealTo == 3)
-//	    	{
-//	    		hand4.addCard(deck.dealCard());
-//	    		dealTo = 0;
-//	    	}
-//	    }
-	    int count = 0;
-	    while(count < 12)
+	    while(deck.cardsLeft() != 0)
 	    {
 	    	if(dealTo == 0)
 	    	{
 	    		hand1.addCard(deck.dealCard());
 	    		dealTo++;
-	    		count++;
 	    	}
 	    	if(dealTo == 1)
 	    	{
 	    		hand2.addCard(deck.dealCard());
 	    		dealTo++;
-	    		count++;
 	    	}
 	    	if(dealTo == 2)
 	    	{
 	    		hand3.addCard(deck.dealCard());
 	    		dealTo++;
-	    		count++;
 	    	}
 	    	if(dealTo == 3)
 	    	{
 	    		hand4.addCard(deck.dealCard());
 	    		dealTo = 0;
-	    		count++;
 	    	}
 	    }
+	   
 	    
 	    hand1.sortByValue();
 	    hand2.sortByValue();
