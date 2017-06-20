@@ -115,6 +115,10 @@ public class Hand
 		}
 	}
 	
+	/**
+	 * Removes card from the hand
+	 * @param c the card to be removed
+	 */
 	public void remove(Card c)
 	{
 		for(int i = 0; i < hand.size(); i++)
