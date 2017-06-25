@@ -112,5 +112,12 @@ public class Deck {
         return (deck.length == 54);
     }
 
+    public boolean isDone()
+    {
+    	if(deck.length == 0)
+    		return true;
+    	else
+    		return false;
+    }
    
 } // end class Deck

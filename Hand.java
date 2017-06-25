@@ -214,4 +214,10 @@ public class Hand
 		return start;
 	}
 	
+	public int numLeft()
+	{
+		return hand.size();
+	}
+
+	
 }
