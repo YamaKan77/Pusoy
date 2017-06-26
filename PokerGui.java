@@ -44,32 +44,42 @@ public class PokerGui extends JPanel {
      */
     public PokerGui() {
 
-        setBackground( new Color(130,50,40) );
-
-        setLayout( new BorderLayout(3,3) );
-
-        CardPanel board = new CardPanel(); // Board will also act as ActionListener.
-        add(board, BorderLayout.CENTER);
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground( new Color(220,200,180) );
-        add(buttonPanel, BorderLayout.SOUTH);
-
-        JButton higher = new JButton( "Higher" );
-        higher.addActionListener(board);
-        buttonPanel.add(higher);
-
-        JButton lower = new JButton( "Lower" );
-        lower.addActionListener(board);
-        buttonPanel.add(lower);
-
-        JButton newGame = new JButton( "New Game" );
-        newGame.addActionListener(board);
-        buttonPanel.add(newGame);
-
-        setBorder(BorderFactory.createLineBorder( new Color(130,50,40), 3) );
-
+    	initGUI();
     }  // end constructor
+    private void initGUI() {
+    	
+    	        setBackground( new Color(130,50,40) );
+    	
+    	        setLayout( new BorderLayout(3,3) );
+    	
+    	        CardPanel board = new CardPanel(); // Board will also act as ActionListener.
+    	add(board, BorderLayout.CENTER);
+    	
+    	        JPanel buttonPanel = new JPanel();
+    	buttonPanel.setBackground( new Color(220,200,180) );
+    	add(buttonPanel, BorderLayout.SOUTH);
+    	
+    	        JButton higher = new JButton( "Higher" );
+    	higher.addActionListener(board);
+    	buttonPanel.add(higher);
+    	
+    	        JButton lower = new JButton( "Lower" );
+    	lower.addActionListener(board);
+    	buttonPanel.add(lower);
+    	
+    	        JButton newGame = new JButton( "New Game" );
+    	newGame.addActionListener(board);
+    	buttonPanel.add(newGame);
+    	
+    	        setBorder(BorderFactory.createLineBorder( new Color(130,50,40), 3) );
+    	
+    	JPanel Cardpanel = new JPanel();
+    	JLabel label = new JLabel(new ImageIcon("clubs1.png"));
+    	Cardpanel.add(label);
+    	Cardpanel.setPreferredSize(new Dimension(200, 200));
+    	add(Cardpanel, BorderLayout.CENTER);
+    	getClass().getResource("/backcloud.png");
+    }
 
 
 
