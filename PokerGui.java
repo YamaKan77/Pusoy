@@ -72,13 +72,11 @@ public class PokerGui extends JPanel {
     	buttonPanel.add(newGame);
     	
     	        setBorder(BorderFactory.createLineBorder( new Color(130,50,40), 3) );
-    	
-    	JPanel Cardpanel = new JPanel();
-    	JLabel label = new JLabel(new ImageIcon("clubs1.png"));
-    	Cardpanel.add(label);
-    	Cardpanel.setPreferredSize(new Dimension(200, 200));
-    	add(Cardpanel, BorderLayout.CENTER);
     	getClass().getResource("/backcloud.png");
+    	
+    	JButton deal = new JButton("Deal");
+    	deal.addActionListener(board);
+    	add(deal, BorderLayout.WEST);
     }
 
 
@@ -132,6 +130,8 @@ public class PokerGui extends JPanel {
                 doLower();
             else if (command.equals("New Game"))
                 doNewGame();
+            else if (command.equals("Deal"))
+            	deal();
         } // end actionPerformed()
         
         
